@@ -3,9 +3,13 @@
 
 In hommage to the late, great Johnny Carson's character, "Carnac The Magnificent". Carnac could predict the contents of a letter.
 
-Carnac.py will "guess" the next bet. Currently, it simly checks the price oracle at the beginning of the round and near the end of the round, if the price is going up, we bet UP. If the price is going down, we bet DOWN. Feel free to change the logic to your liking.
+Carnac.py will "guess" the next bet. Currently, it simply checks the price oracle at the beginning of the round and near the end of the round, if the price is going up, we bet UP. If the price is going down, we bet DOWN. Feel free to change the logic to your liking.
 
 ## Commands
+
+### Pick a bet amount
+
+```python3 Carnac.py --amount 0.01```
 
 ### Pick a random bet amount between two numbers
 
