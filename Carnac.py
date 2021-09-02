@@ -171,8 +171,8 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument("-a","--amount",default=0.009, help="Amount to stake every round.")
-    parser.add_argument("--randmin",default=0.002, help="Minimum bet amount.")
-    parser.add_argument("--randmax",default=0.013, help="Maximum bet amount.")
+    parser.add_argument("--randmin", help="Minimum bet amount.")
+    parser.add_argument("--randmax", help="Maximum bet amount.")
     parser.add_argument("--opposite",action="store_true", help="If ending price is HIGHER, bet DOWN.")
     args = parser.parse_args()
     CarnacSays(args.amount,args.randmin,args.randmax,args.opposite)
