@@ -11,12 +11,9 @@ Carnac.py will "guess" the next bet. Currently, it simly checks the price oracle
 
 ```python3 Carnac.py --randmin 0.002 --randmax 0.015```
 
-### If the ending price is HIGHER than the beginning price, bet UP. Otherwise, bet DOWN. HIGHER is DEFAULT.
+### If the ending price is HIGHER than the beginning price, bet DOWN. If the ending price is LOWER than the beginning price, bet UP.
 
-```python3 Carnac.py --higher --amount 0.01```
+```python3 Carnac.py --opposite --amount 0.01```
 
-### If the ending price is LOWER than the beginning price, bet UP. Otherwise, bet DOWN.
-
-```python3 Carnac.py --lower --amount 0.01```
 
 ### Carnac.py may or may not pick the correct bet. Mileage may vary, use at your own risk. This is not finance advice. 
