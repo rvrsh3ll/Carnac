@@ -9,6 +9,10 @@ Carnac.py will "guess" the next bet. Currently, it simply checks the price oracl
 ## Panckakeswap Prediction BETA
 [Prediction BETA](https://pancakeswap.finance/prediction)
 
+## Setup
+
+```pip3 install web3```
+
 ## Commands
 
 ### Pick a bet amount
