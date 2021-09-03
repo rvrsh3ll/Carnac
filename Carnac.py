@@ -90,7 +90,6 @@ def getEpoch():
     contract = web3.eth.contract(address=addr, abi=PancakePredictionV2ABI)
     epoch = contract.functions.currentEpoch().call()
     return epoch
-
 def checkClaims():
     print("Checking previous round for winnings.")
     sender_address = web3.toChecksumAddress(config["walletAddress"])
@@ -129,7 +128,6 @@ def CarnacSays(amount,ranmin,ranmax,opposite,btcbFactor,multiplier):
             if ranmin and ranmax:
                 amount = round(random.uniform(float(ranmin),float(ranmax)), 3)
             print("Bet Amount: {}".format(amount))
-
             # Get the current card data
             rawEpoch = getEpoch()
             epoch = rawEpoch - 1
@@ -176,7 +174,7 @@ def CarnacSays(amount,ranmin,ranmax,opposite,btcbFactor,multiplier):
                                     print("BTCB Price ascending, adding to our Bull bet.")
                                     amount = float(amount) * float(multiplier)
                                     betBull(amount)
-                                elif endingBTCBPrice < startingBTCBPrice:
+                                else:
                                     print("BTCB Price decending, switching to Bear bet.")
                                     betBear(amount)
                             else:
@@ -195,13 +193,12 @@ def CarnacSays(amount,ranmin,ranmax,opposite,btcbFactor,multiplier):
                                     print("BTCB Price descending, adding to our Bear bet.")
                                     amount = float(amount) * float(multiplier)
                                     betBear(amount)
-                                elif endingBTCBPrice > startingBTCBPrice:
+                                else:
                                     print("BTCB Price ascending, switching to Bull bet.")
                                     betBull(amount)
                             else:
                                 if opposite:
-                                    betBull(amount)
-                                    
+                                    betBull(amount)  
                                 else:
                                     betBear(amount)
                             print("")
