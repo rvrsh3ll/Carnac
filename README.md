@@ -28,7 +28,8 @@ Carnac.py will "guess" the next bet. Currently, it simply checks the price oracl
 ```python3 Carnac.py --opposite --amount 0.01```
 
 ### Use BTCB price to influence the bet. For example, if both BNB and BTCB go UP, multiply the bet. If BNB goes UP and BTCB goes DOWN, bet DOWN.
-python3.9.exe .\Carnac.py --randmin 0.002 --randmax 0.009 --btcbFactor --multiplier 1.25
+
+```python3.9.exe .\Carnac.py --randmin 0.002 --randmax 0.009 --btcbFactor --multiplier 1.25```
 
 
 ### Carnac.py may or may not pick the correct bet. Mileage may vary, use at your own risk. This is not finance advice. 

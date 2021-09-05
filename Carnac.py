@@ -118,7 +118,7 @@ def claimWinnings():
     tx_token = web3.eth.send_raw_transaction(signed_txn.rawTransaction)
     print("Claimed {}".format(web3.toHex(tx_token)))
 
-def CarnacSays(amount,ranmin,ranmax,opposite,btcbFactor,multiplier):
+def CarnacSays(amount,ranmin,ranmax,opposite,btcbFactor,multiplier,skip):
     while True:
         try:
             # Check if we won the previous round
@@ -156,14 +156,24 @@ def CarnacSays(amount,ranmin,ranmax,opposite,btcbFactor,multiplier):
                         betBear(amount)
                         print("")
                         print("Sleeping for next round..")
-                        time.sleep(120)
-                        break
+                        if skip:
+                            print("Skipping a round.")
+                            time.sleep(240)
+                            break
+                        else:
+                            time.sleep(120)
+                            break
                     elif opposite and (currentPrice < lockPrice):
                         betBull(amount)
                         print("")
                         print("Sleeping for next round..")
-                        time.sleep(120)
-                        break
+                        if skip:
+                            print("Skipping a round.")
+                            time.sleep(240)
+                            break
+                        else:
+                            time.sleep(120)
+                            break
                     else:
                         if currentPrice > lockPrice:
                             # Check if BTCB is influencing and bet accordingly
@@ -182,8 +192,13 @@ def CarnacSays(amount,ranmin,ranmax,opposite,btcbFactor,multiplier):
                                     betBull(amount)
                             print("")
                             print("Sleeping for next round..")
-                            time.sleep(120)
-                            break
+                            if skip:
+                                print("Skipping a round.")
+                                time.sleep(240)
+                                break
+                            else:
+                                time.sleep(120)
+                                break
                         elif currentPrice < lockPrice:
                             # Check if BTCB is influincing and bet accordingly
                             if btcbFactor:
@@ -201,8 +216,13 @@ def CarnacSays(amount,ranmin,ranmax,opposite,btcbFactor,multiplier):
                                     betBear(amount)
                             print("")
                             print("Sleeping for next round..")
-                            time.sleep(120)
-                            break
+                            if skip:
+                                print("Skipping a round.")
+                                time.sleep(240)
+                                break
+                            else:
+                                time.sleep(120)
+                                break
                         
                 time.sleep(4)
         except KeyboardInterrupt:
@@ -216,5 +236,6 @@ if __name__ == "__main__":
     parser.add_argument("--multiplier", default=1.10, help="If btcbFactor is enabled, this will multiply the bet if we follow that trend. Default is 10%, 1.10.")
     parser.add_argument("--opposite",action="store_true", help="If ending price is HIGHER, bet DOWN.")
     parser.add_argument("--btcbFactor",action="store_true", help="Factor in BTCB price. Adds 10% to the bet if BNB AND BTCB are going up. Otherwise, it switches the bet.")
+    parser.add_argument("--skipRound", action="store_true", help="Skip ever other round.")
     args = parser.parse_args()
-    CarnacSays(args.amount,args.randmin,args.randmax,args.opposite,args.btcbFactor,args.multiplier)
+    CarnacSays(args.amount,args.randmin,args.randmax,args.opposite,args.btcbFactor,args.multiplier,args.skipRound)
