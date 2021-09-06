@@ -1,3 +1,4 @@
+from toolz.itertoolz import last
 from web3 import Web3
 import argparse
 import time
@@ -95,6 +96,8 @@ def checkClaims():
     contract = web3.eth.contract(address=addr, abi=PancakePredictionV2ABI)
     epochs = []
     lastEpoch = (int(getEpoch()) - 2)
+    twoEpoch = lastEpoch - 1
+    epochs.append(twoEpoch)
     epochs.append(lastEpoch)
     claims = contract.functions.claimable(lastEpoch, sender_address).call()
     if claims != False:
@@ -141,7 +144,7 @@ def CarnacSays(amount,ranmin,ranmax,opposite,btcbFactor,multiplier,skip):
             lockPrice = currentRound[4]
             print("Monitoring {} as the start price".format(int(lockPrice) * 0.00000001))
             # Set the cutoff time for our order to process
-            cutOffTime = closeTimestamp - datetime.timedelta(seconds=35)
+            cutOffTime = closeTimestamp - datetime.timedelta(seconds=25)
             print("Cutoff time for order: {}: ".format(cutOffTime))
             # Get the starting BTCB price
             startingBTCBPrice = getBTCB()
@@ -150,80 +153,58 @@ def CarnacSays(amount,ranmin,ranmax,opposite,btcbFactor,multiplier,skip):
                 currentPrice = askTheOracle()
                 currentTime = datetime.datetime.fromtimestamp(time.time())
                 if currentTime >= cutOffTime:
+                    # Set the cutoff time for our order to process
                     endingBTCBPrice = getBTCB()
                     print("Ending BTCB Price: {}".format(endingBTCBPrice))
-                    if opposite and (currentPrice > lockPrice):
-                        betBear(amount)
-                        print("")
-                        print("Sleeping for next round..")
-                        if skip:
-                            print("Skipping a round.")
-                            time.sleep(240)
-                            break
+                    #else:
+                    if currentPrice > lockPrice:
+                        # Check if BTCB is influencing and bet accordingly
+                        if btcbFactor:
+                            if endingBTCBPrice > startingBTCBPrice:
+                                print("BTCB Price ascending, adding to our Bull bet.")
+                                amount = float(amount) * float(multiplier)
+                                print("Total bet: {}".format(amount))
+                                betBull(amount)
+                            else:
+                                betBull(amount)
                         else:
-                            time.sleep(120)
-                            break
-                    elif opposite and (currentPrice < lockPrice):
-                        betBull(amount)
+                            if opposite:
+                                betBear(amount) 
+                            else:
+                                betBull(amount)
                         print("")
                         print("Sleeping for next round..")
                         if skip:
                             print("Skipping a round.")
-                            time.sleep(240)
+                            time.sleep(600)
                             break
                         else:
                             time.sleep(120)
                             break
                     else:
-                        if currentPrice > lockPrice:
-                            # Check if BTCB is influencing and bet accordingly
-                            if btcbFactor:
-                                if endingBTCBPrice > startingBTCBPrice:
-                                    print("BTCB Price ascending, adding to our Bull bet.")
-                                    amount = float(amount) * float(multiplier)
-                                    betBull(amount)
-                                else:
-                                    print("BTCB Price decending, switching to Bear bet.")
-                                    betBear(amount)
+                        # Check if BTCB is influincing and bet accordingly
+                        if btcbFactor:
+                            if endingBTCBPrice < startingBTCBPrice:
+                                amount = float(amount) * float(multiplier)
+                                print("BTCB Price descending, adding to our Bear bet.")
+                                print("Total bet: {}".format(amount))
+                                betBear(amount)
                             else:
-                                if opposite:
-                                    betBear(amount) 
-                                else:
-                                    betBull(amount)
-                            print("")
-                            print("Sleeping for next round..")
-                            if skip:
-                                print("Skipping a round.")
-                                time.sleep(240)
-                                break
+                                betBear(amount)
+                        else:
+                            if opposite:
+                                betBull(amount)  
                             else:
-                                time.sleep(120)
-                                break
-                        elif currentPrice < lockPrice:
-                            # Check if BTCB is influincing and bet accordingly
-                            if btcbFactor:
-                                if endingBTCBPrice < startingBTCBPrice:
-                                    print("BTCB Price descending, adding to our Bear bet.")
-                                    amount = float(amount) * float(multiplier)
-                                    betBear(amount)
-                                else:
-                                    print("BTCB Price ascending, switching to Bull bet.")
-                                    betBull(amount)
-                            else:
-                                if opposite:
-                                    betBull(amount)  
-                                else:
-                                    betBear(amount)
-                            print("")
-                            print("Sleeping for next round..")
-                            if skip:
-                                print("Skipping a round.")
-                                time.sleep(240)
-                                break
-                            else:
-                                time.sleep(120)
-                                break
-                        
+                                betBear(amount)
+                        print("")
+                        print("Sleeping for next round..")
+                        if skip:
+                            print("Skipping a round.")
+                            time.sleep(600)
+                            break
+                        else:
+                            time.sleep(120)
+                            break
                 time.sleep(4)
         except KeyboardInterrupt:
             sys.exit()
